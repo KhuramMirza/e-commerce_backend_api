@@ -5,7 +5,7 @@ import hpp from "hpp";
 import morgan from "morgan";
 
 import { productRoutes } from "./modules/product/product.routes.js";
-
+import { userRoutes } from "./modules/user/user.routes.js";
 const app: Application = express();
 
 // ======================================================
@@ -37,6 +37,7 @@ app.use(hpp());
 // ======================================================
 // This is where we mount your features
 app.use("/api/v1/products", productRoutes);
+app.use("/api/v1/users", userRoutes);
 
 // Health Check (To verify server is running)
 app.get("/", (req, res) => {
