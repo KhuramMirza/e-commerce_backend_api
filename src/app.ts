@@ -4,6 +4,8 @@ import cors from "cors";
 import hpp from "hpp";
 import morgan from "morgan";
 
+import { productRoutes } from "./modules/product/product.routes.js";
+
 const app: Application = express();
 
 // ======================================================
@@ -18,7 +20,7 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL || "*", // Allow all for now, lock it down later
     credentials: true,
-  })
+  }),
 );
 
 // Logging (See requests in your console)
@@ -34,7 +36,7 @@ app.use(hpp());
 // 2. ROUTES
 // ======================================================
 // This is where we mount your features
-// app.use("/api/v1/products", productRoutes);
+app.use("/api/v1/products", productRoutes);
 
 // Health Check (To verify server is running)
 app.get("/", (req, res) => {
