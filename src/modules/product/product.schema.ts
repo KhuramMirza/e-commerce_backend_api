@@ -10,8 +10,9 @@ export const CreateProductSchema = z.object({
       .string()
       .trim()
       .min(10, "Description must be at least 10 characters"),
-    price: z.number().positive("Price must be positive"),
-    stock: z.number().positive("Stock must be positive").optional(),
+    price: z.coerce.number().positive("Price must be positive"),
+    stock: z.coerce.number().positive("Stock must be positive").optional(),
+    image: z.string().min(1, "Image URL is required"),
     sku: z.string().trim().min(3, "SKU must be at least 3 characters"),
     isActive: z.boolean().optional(),
   }),

@@ -7,6 +7,10 @@ const ProductSchema = new Schema(
       required: true,
       trim: true,
     },
+    image: {
+      type: String,
+      required: true, // Let's make it required for now
+    },
     description: {
       type: String,
       required: true,
@@ -33,7 +37,7 @@ const ProductSchema = new Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export type Product = InferSchemaType<typeof ProductSchema>;
