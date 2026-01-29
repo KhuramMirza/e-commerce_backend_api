@@ -7,6 +7,7 @@ import morgan from "morgan";
 import { productRoutes } from "./modules/product/product.routes.js";
 import { userRoutes } from "./modules/user/user.routes.js";
 import { cartRoutes } from "./modules/cart/cart.routes.js";
+import { orderRoutes } from "./modules/order/order.routes.js";
 const app: Application = express();
 
 // ======================================================
@@ -40,6 +41,7 @@ app.use(hpp());
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/cart", cartRoutes);
+app.use("/api/v1/orders", orderRoutes);
 
 // Health Check (To verify server is running)
 app.get("/", (req, res) => {
