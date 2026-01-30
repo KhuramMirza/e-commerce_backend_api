@@ -37,6 +37,9 @@ export const createOrder = async (
     status: "pending",
   });
 
+  // Fetch the full user details (email, name)
+  await order.populate("user");
+
   // Clear the user's cart
   cart.items = [] as any;
   cart.totalPrice = 0;
