@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { reviewRoutes } from "../review/review.routes.js";
 import { validate } from "../../common/middleware/validate.js";
 import { CreateProductSchema } from "./product.schema.js";
 import { protect, adminOnly } from "../../common/middleware/auth.middleware.js";
@@ -7,6 +8,8 @@ import { handleImageUpload } from "../../common/middleware/upload.middleware.js"
 import * as ProductController from "./product.controller.js";
 
 const router = Router();
+
+router.use("/:productId/reviews", reviewRoutes);
 
 router.post(
   "/",
