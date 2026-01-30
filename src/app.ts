@@ -8,6 +8,7 @@ import { productRoutes } from "./modules/product/product.routes.js";
 import { userRoutes } from "./modules/user/user.routes.js";
 import { cartRoutes } from "./modules/cart/cart.routes.js";
 import { orderRoutes } from "./modules/order/order.routes.js";
+import { webhookCheckout } from "./modules/payment/webhook.controller.js";
 const app: Application = express();
 
 // ======================================================
@@ -23,6 +24,14 @@ app.use(
     origin: process.env.CLIENT_URL || "*", // Allow all for now, lock it down later
     credentials: true,
   }),
+);
+
+// 🚨 IMPORTANT: Define Webhook route BEFORE express.json()
+// We use 'express.raw' specifically for this route so the signature works
+app.post(
+  "/api/v1/webhook",
+  express.raw({ type: "application/json" }),
+  webhookCheckout,
 );
 
 // Logging (See requests in your console)
