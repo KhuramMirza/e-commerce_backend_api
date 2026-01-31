@@ -1,4 +1,10 @@
-import { InferSchemaType, Schema, model } from "mongoose";
+import bcrypt from "bcryptjs";
+import { InferSchemaType, Schema, Model, model } from "mongoose";
+
+// 1. Define the interface for your custom methods
+interface UserMethods {
+  matchPassword(enteredPassword: string): Promise<boolean>;
+}
 
 const UserSchema = new Schema(
   {
@@ -29,6 +35,16 @@ const UserSchema = new Schema(
   },
 );
 
-// Auto-generate TypeScript Type
 export type User = InferSchemaType<typeof UserSchema>;
-export const UserModel = model<User>("User", UserSchema);
+
+UserSchema.methods.matchPassword = async function (
+  this: User,
+  enteredPassword: string,
+) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+export const UserModel = model<User, Model<User, {}, UserMethods>>(
+  "User",
+  UserSchema,
+);
