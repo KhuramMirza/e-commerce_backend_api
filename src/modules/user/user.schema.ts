@@ -22,5 +22,37 @@ export const LoginSchema = z.object({
   }),
 });
 
+export const UpdateMeSchema = z.object({
+  body: z
+    .object({
+      name: z
+        .string()
+        .min(3, "Name should be at least 3 characters long")
+        .max(100, "Name should be at most 100 characters long")
+        .optional(),
+      email: z.email("Invalid email address").optional(),
+    })
+    .strict(),
+});
+
+export const UpdateMyPasswordSchema = z.object({
+  body: z
+    .object({
+      passwordCurrent: z.string().min(8, "Current password is required"),
+      passwordConfirm: z.string().min(8, "Password confirmation is required"),
+      passwordNew: z
+        .string()
+        .min(8, "New password should be at least 8 characters long"),
+    })
+    .refine((data) => data.passwordConfirm === data.passwordNew, {
+      message: "New password and confirmation do not match",
+      path: ["passwordConfirm"],
+    }),
+});
+
 export type RegisterInput = z.infer<typeof RegisterSchema>["body"];
 export type LoginInput = z.infer<typeof LoginSchema>["body"];
+export type UpdateMeInput = z.infer<typeof UpdateMeSchema>["body"];
+export type UpdateMyPasswordInput = z.infer<
+  typeof UpdateMyPasswordSchema
+>["body"];
