@@ -6,6 +6,7 @@ import {
   LoginSchema,
   UpdateMeSchema,
   UpdateMyPasswordSchema,
+  ResetPasswordSchema,
 } from "./user.schema.js";
 import { protect } from "../../common/middleware/auth.middleware.js";
 
@@ -40,3 +41,13 @@ router.patch(
 // Endpoint: GET /api/v1/users/logout
 router.get("/logout", UserController.logoutHandler);
 export const userRoutes = router;
+
+// Endpoint: POST /api/v1/users/forgotPassword
+router.post("/forgotPassword", UserController.forgotPasswordHandler);
+
+// Endpoint: PATCH /api/v1/users/resetPassword/:token
+router.patch(
+  "/resetPassword/:token",
+  validate(ResetPasswordSchema),
+  UserController.resetPasswordHandler,
+);
