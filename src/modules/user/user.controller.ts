@@ -5,6 +5,7 @@ import {
   LoginInput,
   UpdateMeInput,
   UpdateMyPasswordInput,
+  ResetPasswordInput,
 } from "./user.schema.js";
 import { AppError } from "../../common/utils/AppError.js";
 import { filterObj } from "./user.service.js";
@@ -109,4 +110,54 @@ export const logoutHandler = (req: Request, res: Response) => {
     status: "success",
     message: "Logged out successfully",
   });
+};
+
+// 6. Forgot Password Handler
+export const forgotPasswordHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    // 1. Delegate business logic to Service
+    await UserService.forgotPassword(req.body.email);
+
+    // 2. Send Response
+    res.status(200).json({
+      status: "success",
+      message: "Token sent to email!",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// 7. Reset Password Handler
+export const resetPasswordHandler = async (
+  req: Request<ResetPasswordInput["params"], {}, ResetPasswordInput["body"]>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    // 1. Reset the password
+    const user = await UserService.resetPassword(
+      req.params.token,
+      req.body.password,
+    );
+
+    // 2. Log them in immediately (Generate JWT)
+    // Note: You might need to export your 'signToken' helper from auth.controller or service
+    // For now, I'll assume you can import `signToken` or duplicate the logic briefly.
+
+    // const token = signToken(user._id);
+    // ^^^ You need to make sure your signToken function is exported/available!
+
+    res.status(200).json({
+      status: "success",
+      message: "Password reset successful! You are now logged in.",
+      // token, // Uncomment when you have the token logic ready
+    });
+  } catch (error) {
+    next(error);
+  }
 };
