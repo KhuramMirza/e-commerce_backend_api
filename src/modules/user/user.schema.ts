@@ -50,9 +50,25 @@ export const UpdateMyPasswordSchema = z.object({
     }),
 });
 
+export const ResetPasswordSchema = z.object({
+  params: z.object({
+    token: z.string(),
+  }),
+  body: z
+    .object({
+      password: z.string().min(8, "Password must be at least 8 characters"),
+      passwordConfirm: z.string().min(8, "Please confirm your password"),
+    })
+    .refine((data) => data.password === data.passwordConfirm, {
+      message: "Passwords do not match",
+      path: ["passwordConfirm"],
+    }),
+});
+
 export type RegisterInput = z.infer<typeof RegisterSchema>["body"];
 export type LoginInput = z.infer<typeof LoginSchema>["body"];
 export type UpdateMeInput = z.infer<typeof UpdateMeSchema>["body"];
 export type UpdateMyPasswordInput = z.infer<
   typeof UpdateMyPasswordSchema
 >["body"];
+export type ResetPasswordInput = z.infer<typeof ResetPasswordSchema>;
